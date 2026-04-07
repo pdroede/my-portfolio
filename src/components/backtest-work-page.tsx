@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { motion, useInView } from 'motion/react'
 import { ParentSize } from '@visx/responsive'
-import { InlineMath, BlockMath } from 'react-katex'
+import { KatexInline, KatexBlock } from '@/components/katex-math'
 
 import { EquityChart, type EquityPoint } from '@/components/ui/finance-chart'
 import { fmtPct, fmtRatio } from '@/components/backtest-report-ui'
@@ -140,7 +140,7 @@ function Definition({
         <span className="text-zinc-400 text-sm" style={{ fontFamily: SERIF }}>{name}</span>
       </div>
       <div className="overflow-x-auto py-2 text-zinc-200">
-        <BlockMath math={formula} />
+        <KatexBlock math={formula} />
       </div>
       <p className="text-zinc-500 text-xs leading-relaxed mt-2" style={{ fontFamily: SERIF }}>{description}</p>
     </div>
@@ -203,7 +203,7 @@ function MetricCard({ symbol, label, value, delay }: { symbol: string; label: st
     <Reveal delay={delay}>
       <div className="border-zinc-800/60 bg-zinc-900/30 rounded-xl border p-5">
         <div className="text-zinc-600 font-mono text-xs overflow-x-auto mb-3">
-          <InlineMath math={symbol} />
+          <KatexInline math={symbol} />
         </div>
         <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-mono">{label}</p>
         <p className="text-zinc-50 text-3xl font-semibold tabular-nums tracking-tight mt-1" style={{ fontFamily: SERIF }}>
@@ -404,7 +404,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.07}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Seja <InlineMath math={bt.rSeq} /> a sequência de retornos de cada operação (em dólares), onde <InlineMath math={"N"} /> é o número total de trades. O capital composto no instante <InlineMath math={"t"} /> é dado por:
+                  Seja <KatexInline math={bt.rSeq} /> a sequência de retornos de cada operação (em dólares), onde <KatexInline math={"N"} /> é o número total de trades. O capital composto no instante <KatexInline math={"t"} /> é dado por:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -420,7 +420,7 @@ export function BacktestWorkPage({
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>Drawdown</strong> no instante <InlineMath math={"t"} /> mede a queda percentual em relação ao máximo histórico acumulado:</p>
+                <p>O <strong>Drawdown</strong> no instante <KatexInline math={"t"} /> mede a queda percentual em relação ao máximo histórico acumulado:</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
@@ -434,7 +434,7 @@ export function BacktestWorkPage({
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>CAGR</strong> annualiza o retorno total considerando o efeito do capital composto ao longo do período <InlineMath math={"T"} /> (em anos):</p>
+                <p>O <strong>CAGR</strong> annualiza o retorno total considerando o efeito do capital composto ao longo do período <KatexInline math={"T"} /> (em anos):</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
@@ -448,7 +448,7 @@ export function BacktestWorkPage({
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>Índice de Sharpe</strong> anualizado, convenção trade-based com frequência de operações <InlineMath math={"f = N/T"} />:</p>
+                <p>O <strong>Índice de Sharpe</strong> anualizado, convenção trade-based com frequência de operações <KatexInline math={"f = N/T"} />:</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
@@ -485,7 +485,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Os dados históricos são obtidos em resolução de minuto de um provedor institucional (Databento), cobrindo MES (S&amp;P 500 micro, <InlineMath math={bt.mes5} />) e MNQ (NASDAQ micro, <InlineMath math={bt.mnq2} />). A cadeia de processamento segue quatro etapas com entradas e saídas explícitas:
+                  Os dados históricos são obtidos em resolução de minuto de um provedor institucional (Databento), cobrindo MES (S&amp;P 500 micro, <KatexInline math={bt.mes5} />) e MNQ (NASDAQ micro, <KatexInline math={bt.mnq2} />). A cadeia de processamento segue quatro etapas com entradas e saídas explícitas:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -494,19 +494,19 @@ export function BacktestWorkPage({
               {[
                 {
                   n: '4.1', title: 'Ingestão e Agregação',
-                  body: <>Dados brutos minuto a minuto agregados para o timeframe de simulação. Cada barra gera um registro com campos <InlineMath math={bt.pipe41} />. Rolls de contrato tratados com ajuste retroativo.</>,
+                  body: <>Dados brutos minuto a minuto agregados para o timeframe de simulação. Cada barra gera um registro com campos <KatexInline math={bt.pipe41} />. Rolls de contrato tratados com ajuste retroativo.</>,
                 },
                 {
                   n: '4.2', title: 'Motor de Simulação',
-                  body: <>Regra de decisão codificada em Python sem parâmetros ajustados post-hoc. O motor registra entrada <InlineMath math={bt.pipe42a} />, saída <InlineMath math={bt.pipe42b} /> e P&amp;L em pontos. O CSV exportado permite recalcular qualquer métrica independentemente.</>,
+                  body: <>Regra de decisão codificada em Python sem parâmetros ajustados post-hoc. O motor registra entrada <KatexInline math={bt.pipe42a} />, saída <KatexInline math={bt.pipe42b} /> e P&amp;L em pontos. O CSV exportado permite recalcular qualquer métrica independentemente.</>,
                 },
                 {
                   n: '4.3', title: 'Conversão de PnL e Custos',
-                  body: <>P&amp;L bruto: <InlineMath math={bt.pipe43a} />. Comissão round-trip: <InlineMath math={bt.pipe43b} /> por micro-contrato. Líquido: <InlineMath math={bt.pipe43c} />, aplicado em camada única antes de qualquer métrica.</>,
+                  body: <>P&amp;L bruto: <KatexInline math={bt.pipe43a} />. Comissão round-trip: <KatexInline math={bt.pipe43b} /> por micro-contrato. Líquido: <KatexInline math={bt.pipe43c} />, aplicado em camada única antes de qualquer métrica.</>,
                 },
                 {
                   n: '4.4', title: 'Análise de Incerteza',
-                  body: <>Bootstrap com reposição sobre <InlineMath math={bt.pipe44a} /> gerando <InlineMath math={bt.pipe44b} /> réplicas, e Monte Carlo parametrizado por <InlineMath math={bt.pipe44c} /> estimados da amostra. As distribuições de MDD e equity terminal descrevem o cone de incerteza ao redor da curva histórica.</>,
+                  body: <>Bootstrap com reposição sobre <KatexInline math={bt.pipe44a} /> gerando <KatexInline math={bt.pipe44b} /> réplicas, e Monte Carlo parametrizado por <KatexInline math={bt.pipe44c} /> estimados da amostra. As distribuições de MDD e equity terminal descrevem o cone de incerteza ao redor da curva histórica.</>,
                 },
               ].map(({ n, title, body }, i) => (
                 <Reveal key={n} delay={i * 0.06}>
@@ -532,7 +532,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.06}>
               <ArticleProse className="mt-6">
                 <p>
-                  As curvas abaixo mostram a evolução do capital composto <InlineMath math={"V_t"} /> (linha contínua) contra o benchmark <em>buy-and-hold</em> <InlineMath math={bt.vtBh} /> (linha tracejada), partindo de <InlineMath math={bt.v0k} />.
+                  As curvas abaixo mostram a evolução do capital composto <KatexInline math={"V_t"} /> (linha contínua) contra o benchmark <em>buy-and-hold</em> <KatexInline math={bt.vtBh} /> (linha tracejada), partindo de <KatexInline math={bt.v0k} />.
                 </p>
               </ArticleProse>
             </Reveal>
@@ -568,7 +568,7 @@ export function BacktestWorkPage({
                 })}
               </div>
               <span className="font-mono text-[9px] text-zinc-600 hidden sm:block">
-                base <InlineMath math={bt.v0k} />
+                base <KatexInline math={bt.v0k} />
               </span>
             </Reveal>
 
@@ -576,7 +576,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.1}>
               <Figure
                 n="1"
-                caption={<><InlineMath math={"V_t"} /> (estratégia, linha contínua) vs. <InlineMath math={bt.vtBh} /> (buy &amp; hold, linha tracejada). Capital composto, série mensal.</>}
+                caption={<><KatexInline math={"V_t"} /> (estratégia, linha contínua) vs. <KatexInline math={bt.vtBh} /> (buy &amp; hold, linha tracejada). Capital composto, série mensal.</>}
               >
                 <div className="border-zinc-800 bg-zinc-900/20 rounded-2xl border overflow-hidden p-4 pb-2">
                   {load.status === 'loading' && (
@@ -609,11 +609,11 @@ export function BacktestWorkPage({
                   <div className="flex gap-5 pt-2 pb-1 px-1">
                     <span className="flex items-center gap-2 text-[11px] text-zinc-500" style={{ fontFamily: SERIF }}>
                       <span className="inline-block w-5 h-0.5 bg-emerald-400 rounded" />
-                      Estratégia — <InlineMath math={"V_t"} />
+                      Estratégia — <KatexInline math={"V_t"} />
                     </span>
                     <span className="flex items-center gap-2 text-[11px] text-zinc-500" style={{ fontFamily: SERIF }}>
                       <span className="inline-block w-5 border-t-2 border-dashed border-sky-400 rounded" />
-                      Buy &amp; Hold — <InlineMath math={bt.vtBh} />
+                      Buy &amp; Hold — <KatexInline math={bt.vtBh} />
                     </span>
                   </div>
                 </div>
@@ -625,7 +625,7 @@ export function BacktestWorkPage({
               <Reveal delay={0.12}>
                 <Figure
                   n="2"
-                  caption={<><InlineMath math={bt.ddCaption} /> — drawdown percentual vs. pico, série mensal.</>}
+                  caption={<><KatexInline math={bt.ddCaption} /> — drawdown percentual vs. pico, série mensal.</>}
                 >
                   <div className="border-zinc-800 bg-zinc-900/20 rounded-2xl border overflow-hidden px-4 pt-4 pb-1">
                     <DrawdownChart monthly={bundle.monthly} />
@@ -688,7 +688,7 @@ export function BacktestWorkPage({
               {[
                 {
                   label: 'Poder estatístico da amostra',
-                  body: <>Com <InlineMath math={bt.o61a} /> e <InlineMath math={bt.o61b} /> operações, o erro-padrão do win rate estimado é <InlineMath math={bt.o61c} />. Um intervalo de 95% de confiança tem largura <InlineMath math={bt.o61d} /> — estreito o suficiente para que as diferenças observadas sejam estatisticamente distinguíveis de ruído.</>,
+                  body: <>Com <KatexInline math={bt.o61a} /> e <KatexInline math={bt.o61b} /> operações, o erro-padrão do win rate estimado é <KatexInline math={bt.o61c} />. Um intervalo de 95% de confiança tem largura <KatexInline math={bt.o61d} /> — estreito o suficiente para que as diferenças observadas sejam estatisticamente distinguíveis de ruído.</>,
                 },
                 {
                   label: 'Parcimônia paramétrica',
@@ -699,12 +699,12 @@ export function BacktestWorkPage({
                   body: 'A análise year-by-year mostra todos os anos no positivo para MES, com win rate oscilando em faixa estreita ao longo de múltiplos regimes de volatilidade. Formalmente, um teste de estabilidade de parâmetros (e.g., CUSUM ou Chow test) não rejeita a hipótese de coeficientes estáveis ao longo do período.',
                 },
                 {
-                  label: <>Simetria <InlineMath math={bt.o62a} /></>,
-                  body: <>MES: <InlineMath math={bt.o62b} />. MNQ: <InlineMath math={bt.o62c} />. A razão <InlineMath math={bt.o62d} /> é coerente com estrutura de risco/retorno definida a priori — não com otimização post-hoc de targets.</>,
+                  label: <>Simetria <KatexInline math={bt.o62a} /></>,
+                  body: <>MES: <KatexInline math={bt.o62b} />. MNQ: <KatexInline math={bt.o62c} />. A razão <KatexInline math={bt.o62d} /> é coerente com estrutura de risco/retorno definida a priori — não com otimização post-hoc de targets.</>,
                 },
                 {
                   label: 'Profit Factor dentro de limites críveis',
-                  body: <>MES: <InlineMath math={bt.o63a} />. MNQ: <InlineMath math={bt.o63b} />. Profit factors acima de 2,5–3 em amostras intradiárias são tipicamente sintomáticos de data-mining. Os valores observados situam-se numa faixa razoável.</>,
+                  body: <>MES: <KatexInline math={bt.o63a} />. MNQ: <KatexInline math={bt.o63b} />. Profit factors acima de 2,5–3 em amostras intradiárias são tipicamente sintomáticos de data-mining. Os valores observados situam-se numa faixa razoável.</>,
                 },
               ].map(({ label, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -724,11 +724,11 @@ export function BacktestWorkPage({
               {[
                 {
                   label: 'Data-mining bias na seleção de frequência',
-                  body: <>Se o número de sinais por sessão foi determinado após comparação entre alternativas no mesmo histórico, isso constitui um grau de liberdade adicional. O impacto esperado é pequeno dado <InlineMath math={"N > 4{.}000"} />, mas o viés existe e deve ser registrado. A validação canônica é aplicar a escolha a um sub-período holdout não visto durante a calibração.</>,
+                  body: <>Se o número de sinais por sessão foi determinado após comparação entre alternativas no mesmo histórico, isso constitui um grau de liberdade adicional. O impacto esperado é pequeno dado <KatexInline math={"N > 4{.}000"} />, mas o viés existe e deve ser registrado. A validação canônica é aplicar a escolha a um sub-período holdout não visto durante a calibração.</>,
                 },
                 {
                   label: 'Quebra de regime em NQ pós-2020',
-                  body: <>A série NQ exibe aceleração expressiva a partir de 2021, consistente com aumento estrutural de volatilidade. Isso não é overfitting — é mudança de regime. Mas se qualquer parâmetro foi ajustado com visibilidade sobre esse período, os estimadores <InlineMath math={bt.o632a} /> e <InlineMath math={bt.o632b} /> estarão contaminados por look-ahead implícito.</>,
+                  body: <>A série NQ exibe aceleração expressiva a partir de 2021, consistente com aumento estrutural de volatilidade. Isso não é overfitting — é mudança de regime. Mas se qualquer parâmetro foi ajustado com visibilidade sobre esse período, os estimadores <KatexInline math={bt.o632a} /> e <KatexInline math={bt.o632b} /> estarão contaminados por look-ahead implícito.</>,
                 },
                 {
                   label: 'Viés de recência nos dados mais recentes',
@@ -736,7 +736,7 @@ export function BacktestWorkPage({
                 },
                 {
                   label: 'Lacuna simulação–execução (execution gap)',
-                  body: <>O maior risco estrutural não é overfitting estatístico — é o gap entre a hipótese de preenchimento do backtest e o comportamento real das ordens em live. O motor assume fill garantido ao nível de preço definido. Em live, o mercado pode <em>passar pelo nível sem retornar</em>, gerando misses ou fills a preços adversos. Este gap infla o win rate simulado de forma sistemática e não é corrigível apenas por ajuste de <InlineMath math={bt.o63delta} />.</>,
+                  body: <>O maior risco estrutural não é overfitting estatístico — é o gap entre a hipótese de preenchimento do backtest e o comportamento real das ordens em live. O motor assume fill garantido ao nível de preço definido. Em live, o mercado pode <em>passar pelo nível sem retornar</em>, gerando misses ou fills a preços adversos. Este gap infla o win rate simulado de forma sistemática e não é corrigível apenas por ajuste de <KatexInline math={bt.o63delta} />.</>,
                 },
               ].map(({ label, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -755,7 +755,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="space-y-4">
                 <p>
-                  A escolha de operar <InlineMath math={"K > 1"} /> sinais por sessão decorre de uma prova sobre a distribuição do P&amp;L diário. Seja <InlineMath math={"p"} /> a win rate por sinal e assuma independência entre sinais de uma mesma sessão como aproximação de primeira ordem. A probabilidade de uma sessão encerrar com P&amp;L negativo é:
+                  A escolha de operar <KatexInline math={"K > 1"} /> sinais por sessão decorre de uma prova sobre a distribuição do P&amp;L diário. Seja <KatexInline math={"p"} /> a win rate por sinal e assuma independência entre sinais de uma mesma sessão como aproximação de primeira ordem. A probabilidade de uma sessão encerrar com P&amp;L negativo é:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -770,7 +770,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="space-y-4 mt-2">
                 <p>
-                  O valor esperado do P&amp;L diário com <InlineMath math={"K"} /> sinais é <InlineMath math={bt.kE} /> — escala linearmente. Mas a <strong>distribuição</strong> muda: a massa na cauda esquerda cai de <InlineMath math={"(1-p)"} /> para <InlineMath math={"(1-p)^K"} />. A hipótese de independência é uma aproximação — sinais da mesma sessão compartilham contexto de mercado. Com correlação <InlineMath math={bt.rho} /> entre eles, o estimador real de <InlineMath math={bt.pLoss} /> situa-se entre os extremos:
+                  O valor esperado do P&amp;L diário com <KatexInline math={"K"} /> sinais é <KatexInline math={bt.kE} /> — escala linearmente. Mas a <strong>distribuição</strong> muda: a massa na cauda esquerda cai de <KatexInline math={"(1-p)"} /> para <KatexInline math={"(1-p)^K"} />. A hipótese de independência é uma aproximação — sinais da mesma sessão compartilham contexto de mercado. Com correlação <KatexInline math={bt.rho} /> entre eles, o estimador real de <KatexInline math={bt.pLoss} /> situa-se entre os extremos:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -814,8 +814,8 @@ export function BacktestWorkPage({
             <div className="mt-6 space-y-4">
               {[
                 { title: 'Viés de sobrevivência e look-ahead', body: 'A regra de decisão é aplicada ao histórico completo. Mesmo sem look-ahead direto, parâmetros ou limiares derivados do mesmo período criam um viés in-sample implícito.' },
-                { title: 'Preenchimento de ordens', body: <>O motor assume preenchimento total ao preço simulado. Em tamanhos maiores, o impacto de mercado é proporcional à profundidade do book — não modelado aqui. O slippage é tratado como parâmetro fixo <InlineMath math={bt.limDelta} /> adicionado ao custo por trade.</> },
-                { title: 'Dependência de regime', body: <>Os estimadores <InlineMath math={bt.limMu} /> e <InlineMath math={bt.limSigma} /> são estacionários apenas se o regime de mercado for estável. Períodos de baixa volatilidade e crises produzem distribuições distintas, invalidando interpolação ingênua de Sharpe/Sortino.</> },
+                { title: 'Preenchimento de ordens', body: <>O motor assume preenchimento total ao preço simulado. Em tamanhos maiores, o impacto de mercado é proporcional à profundidade do book — não modelado aqui. O slippage é tratado como parâmetro fixo <KatexInline math={bt.limDelta} /> adicionado ao custo por trade.</> },
+                { title: 'Dependência de regime', body: <>Os estimadores <KatexInline math={bt.limMu} /> e <KatexInline math={bt.limSigma} /> são estacionários apenas se o regime de mercado for estável. Períodos de baixa volatilidade e crises produzem distribuições distintas, invalidando interpolação ingênua de Sharpe/Sortino.</> },
                 { title: 'Operação live', body: 'A infraestrutura de execução (reconexão de API, latência, gestão de estados, confirmação humana) introduz risco operacional não capturado pelas métricas quantitativas.' },
               ].map(({ title, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
