@@ -1,4 +1,3 @@
-import { tex } from '@/lib/tex'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
@@ -404,7 +403,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.07}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Seja <InlineMath math={tex`\{r_t\}_{t=1}^{N}`} /> a sequência de retornos de cada operação (em dólares), onde <InlineMath math={tex`N`} /> é o número total de trades. O capital composto no instante <InlineMath math={tex`t`} /> é dado por:
+                  Seja <InlineMath math={"\\{r_t\\}_{t=1}^{N}"} /> a sequência de retornos de cada operação (em dólares), onde <InlineMath math={"N"} /> é o número total de trades. O capital composto no instante <InlineMath math={"t"} /> é dado por:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -413,49 +412,49 @@ export function BacktestWorkPage({
               <Definition
                 id="3.1"
                 name="Capital Composto"
-                formula={tex`V_t = V_0 + \sum_{i=1}^{t} r_i \cdot c_i - \sum_{i=1}^{t} \phi_i`}
+                formula={"V_t = V_0 + \\sum_{i=1}^{t} r_i \\cdot c_i - \\sum_{i=1}^{t} \\phi_i"}
                 description="onde V₀ é o capital inicial, cᵢ é o número de contratos na operação i (proporcional a Vᵢ₋₁ / V₀), e φᵢ é a comissão paga na operação i. O número de contratos cresce com o capital — reinvestimento completo."
               />
             </Reveal>
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>Drawdown</strong> no instante <InlineMath math={tex`t`} /> mede a queda percentual em relação ao máximo histórico acumulado:</p>
+                <p>O <strong>Drawdown</strong> no instante <InlineMath math={"t"} /> mede a queda percentual em relação ao máximo histórico acumulado:</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
               <Definition
                 id="3.2"
                 name="Drawdown e Maximum Drawdown"
-                formula={tex`DD_t = \frac{\max_{s \leq t} V_s - V_t}{\max_{s \leq t} V_s}, \quad MDD = \max_{t \in [0,T]} DD_t`}
+                formula={"DD_t = \\frac{\\max_{s \\leq t} V_s - V_t}{\\max_{s \\leq t} V_s}, \\quad MDD = \\max_{t \\in [0,T]} DD_t"}
                 description="MDD representa o pior momento desde o pico histórico. É uma métrica de risco de cauda — não de dispersão — e não é capturada pelo desvio-padrão."
               />
             </Reveal>
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>CAGR</strong> annualiza o retorno total considerando o efeito do capital composto ao longo do período <InlineMath math={tex`T`} /> (em anos):</p>
+                <p>O <strong>CAGR</strong> annualiza o retorno total considerando o efeito do capital composto ao longo do período <InlineMath math={"T"} /> (em anos):</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
               <Definition
                 id="3.3"
                 name="CAGR — Crescimento Anualizado"
-                formula={tex`\text{CAGR} = \left(\frac{V_T}{V_0}\right)^{1/T} - 1`}
+                formula={"\\text{CAGR} = \\left(\\frac{V_T}{V_0}\\right)^{1/T} - 1"}
                 description="Equivalente à taxa de juros composta que produziria o mesmo crescimento de V₀ até V_T em T anos. Sensível a valores extremos no início ou no fim da série."
               />
             </Reveal>
 
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
-                <p>O <strong>Índice de Sharpe</strong> anualizado, convenção trade-based com frequência de operações <InlineMath math={tex`f = N/T`} />:</p>
+                <p>O <strong>Índice de Sharpe</strong> anualizado, convenção trade-based com frequência de operações <InlineMath math={"f = N/T"} />:</p>
               </ArticleProse>
             </Reveal>
             <Reveal delay={0.1}>
               <Definition
                 id="3.4"
                 name="Sharpe Ratio (anualizado)"
-                formula={tex`\mathcal{S} = \frac{\bar{r}}{\hat{\sigma}_r} \cdot \sqrt{f}, \quad f = \frac{N}{T}`}
+                formula={"\\mathcal{S} = \\frac{\\bar{r}}{\\hat{\\sigma}_r} \\cdot \\sqrt{f}, \\quad f = \\frac{N}{T}"}
                 description="r̄ é o retorno médio por trade, σ̂_r é o desvio-padrão amostral, e f é a frequência anualizada de trades. Penaliza igualmente ganhos e perdas — limitação quando a distribuição é assimétrica."
               />
             </Reveal>
@@ -469,7 +468,7 @@ export function BacktestWorkPage({
               <Definition
                 id="3.5"
                 name="Sortino Ratio (anualizado)"
-                formula={tex`\mathcal{D} = \frac{\bar{r}}{\sigma_d} \cdot \sqrt{f}, \quad \sigma_d = \sqrt{\frac{1}{N}\sum_{i=1}^{N} \min(r_i, 0)^2}`}
+                formula={"\\mathcal{D} = \\frac{\\bar{r}}{\\sigma_d} \\cdot \\sqrt{f}, \\quad \\sigma_d = \\sqrt{\\frac{1}{N}\\sum_{i=1}^{N} \\min(r_i, 0)^2}"}
                 description="σ_d é o downside deviation: raiz quadrada da média dos quadrados dos retornos negativos. Trades vencedores não aumentam σ_d, ao contrário do que ocorre com σ̂_r no Sharpe."
               />
             </Reveal>
@@ -485,7 +484,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Os dados históricos são obtidos em resolução de minuto de um provedor institucional (Databento), cobrindo MES (S&amp;P 500 micro, <InlineMath math={tex`\$5\text{ por ponto}`} />) e MNQ (NASDAQ micro, <InlineMath math={tex`\$2\text{ por ponto}`} />). A cadeia de processamento segue quatro etapas com entradas e saídas explícitas:
+                  Os dados históricos são obtidos em resolução de minuto de um provedor institucional (Databento), cobrindo MES (S&amp;P 500 micro, <InlineMath math={"\\$5\\text{ por ponto}"} />) e MNQ (NASDAQ micro, <InlineMath math={"\\$2\\text{ por ponto}"} />). A cadeia de processamento segue quatro etapas com entradas e saídas explícitas:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -494,19 +493,19 @@ export function BacktestWorkPage({
               {[
                 {
                   n: '4.1', title: 'Ingestão e Agregação',
-                  body: <>Dados brutos minuto a minuto agregados para o timeframe de simulação. Cada barra gera um registro com campos <InlineMath math={tex`\{t_{\text{open}},\, P_{\text{open}},\, P_{\text{high}},\, P_{\text{low}},\, P_{\text{close}},\, V\}`} />. Rolls de contrato tratados com ajuste retroativo.</>,
+                  body: <>Dados brutos minuto a minuto agregados para o timeframe de simulação. Cada barra gera um registro com campos <InlineMath math={"\\{t_{\\text{open}},\\, P_{\\text{open}},\\, P_{\\text{high}},\\, P_{\\text{low}},\\, P_{\\text{close}},\\, V\\}"} />. Rolls de contrato tratados com ajuste retroativo.</>,
                 },
                 {
                   n: '4.2', title: 'Motor de Simulação',
-                  body: <>Regra de decisão codificada em Python sem parâmetros ajustados post-hoc. O motor registra entrada <InlineMath math={tex`(P_{\text{entry}},\, t_{\text{entry}})`} />, saída <InlineMath math={tex`(P_{\text{exit}},\, t_{\text{exit}})`} /> e P&amp;L em pontos. O CSV exportado permite recalcular qualquer métrica independentemente.</>,
+                  body: <>Regra de decisão codificada em Python sem parâmetros ajustados post-hoc. O motor registra entrada <InlineMath math={"(P_{\\text{entry}},\\, t_{\\text{entry}})"} />, saída <InlineMath math={"(P_{\\text{exit}},\\, t_{\\text{exit}})"} /> e P&amp;L em pontos. O CSV exportado permite recalcular qualquer métrica independentemente.</>,
                 },
                 {
                   n: '4.3', title: 'Conversão de PnL e Custos',
-                  body: <>P&amp;L bruto: <InlineMath math={tex`r_i^{\text{gross}} = \Delta P_i \cdot \text{ptval} \cdot c_i`} />. Comissão round-trip: <InlineMath math={tex`\phi = \$0{,}62`} /> por micro-contrato. Líquido: <InlineMath math={tex`r_i = r_i^{\text{gross}} - c_i \cdot \phi`} />, aplicado em camada única antes de qualquer métrica.</>,
+                  body: <>P&amp;L bruto: <InlineMath math={"r_i^{\\text{gross}} = \\Delta P_i \\cdot \\text{ptval} \\cdot c_i"} />. Comissão round-trip: <InlineMath math={"\\phi = \\$0{,}62"} /> por micro-contrato. Líquido: <InlineMath math={"r_i = r_i^{\\text{gross}} - c_i \\cdot \\phi"} />, aplicado em camada única antes de qualquer métrica.</>,
                 },
                 {
                   n: '4.4', title: 'Análise de Incerteza',
-                  body: <>Bootstrap com reposição sobre <InlineMath math={tex`\{r_i\}`} /> gerando <InlineMath math={tex`B = 10{,}000`} /> réplicas, e Monte Carlo parametrizado por <InlineMath math={tex`(\mu, \sigma, \text{win rate})`} /> estimados da amostra. As distribuições de MDD e equity terminal descrevem o cone de incerteza ao redor da curva histórica.</>,
+                  body: <>Bootstrap com reposição sobre <InlineMath math={"\\{r_i\\}"} /> gerando <InlineMath math={"B = 10{,}000"} /> réplicas, e Monte Carlo parametrizado por <InlineMath math={"(\\mu, \\sigma, \\text{win rate})"} /> estimados da amostra. As distribuições de MDD e equity terminal descrevem o cone de incerteza ao redor da curva histórica.</>,
                 },
               ].map(({ n, title, body }, i) => (
                 <Reveal key={n} delay={i * 0.06}>
@@ -532,7 +531,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.06}>
               <ArticleProse className="mt-6">
                 <p>
-                  As curvas abaixo mostram a evolução do capital composto <InlineMath math={tex`V_t`} /> (linha contínua) contra o benchmark <em>buy-and-hold</em> <InlineMath math={tex`V_t^{\text{BH}}`} /> (linha tracejada), partindo de <InlineMath math={tex`V_0 = \$10{,}000`} />.
+                  As curvas abaixo mostram a evolução do capital composto <InlineMath math={"V_t"} /> (linha contínua) contra o benchmark <em>buy-and-hold</em> <InlineMath math={"V_t^{\\text{BH}}"} /> (linha tracejada), partindo de <InlineMath math={"V_0 = \\$10{,}000"} />.
                 </p>
               </ArticleProse>
             </Reveal>
@@ -568,7 +567,7 @@ export function BacktestWorkPage({
                 })}
               </div>
               <span className="font-mono text-[9px] text-zinc-600 hidden sm:block">
-                base <InlineMath math={tex`V_0 = \$10{,}000`} />
+                base <InlineMath math={"V_0 = \\$10{,}000"} />
               </span>
             </Reveal>
 
@@ -576,7 +575,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.1}>
               <Figure
                 n="1"
-                caption={<><InlineMath math={tex`V_t`} /> (estratégia, linha contínua) vs. <InlineMath math={tex`V_t^{\text{BH}}`} /> (buy &amp; hold, linha tracejada). Capital composto, série mensal.</>}
+                caption={<><InlineMath math={"V_t"} /> (estratégia, linha contínua) vs. <InlineMath math={"V_t^{\\text{BH}}"} /> (buy &amp; hold, linha tracejada). Capital composto, série mensal.</>}
               >
                 <div className="border-zinc-800 bg-zinc-900/20 rounded-2xl border overflow-hidden p-4 pb-2">
                   {load.status === 'loading' && (
@@ -609,11 +608,11 @@ export function BacktestWorkPage({
                   <div className="flex gap-5 pt-2 pb-1 px-1">
                     <span className="flex items-center gap-2 text-[11px] text-zinc-500" style={{ fontFamily: SERIF }}>
                       <span className="inline-block w-5 h-0.5 bg-emerald-400 rounded" />
-                      Estratégia — <InlineMath math={tex`V_t`} />
+                      Estratégia — <InlineMath math={"V_t"} />
                     </span>
                     <span className="flex items-center gap-2 text-[11px] text-zinc-500" style={{ fontFamily: SERIF }}>
                       <span className="inline-block w-5 border-t-2 border-dashed border-sky-400 rounded" />
-                      Buy &amp; Hold — <InlineMath math={tex`V_t^{\text{BH}}`} />
+                      Buy &amp; Hold — <InlineMath math={"V_t^{\\text{BH}}"} />
                     </span>
                   </div>
                 </div>
@@ -625,7 +624,7 @@ export function BacktestWorkPage({
               <Reveal delay={0.12}>
                 <Figure
                   n="2"
-                  caption={<><InlineMath math={tex`DD_t = (\max_{s \leq t} V_s - V_t)\,/\,\max_{s \leq t} V_s`} /> — drawdown percentual vs. pico, série mensal.</>}
+                  caption={<><InlineMath math={"DD_t = (\\max_{s \\leq t} V_s - V_t)\\,/\\,\\max_{s \\leq t} V_s"} /> — drawdown percentual vs. pico, série mensal.</>}
                 >
                   <div className="border-zinc-800 bg-zinc-900/20 rounded-2xl border overflow-hidden px-4 pt-4 pb-1">
                     <DrawdownChart monthly={bundle.monthly} />
@@ -638,9 +637,9 @@ export function BacktestWorkPage({
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
               {s ? (
                 <>
-                  <MetricCard delay={0} symbol={tex`\text{CAGR}`} label="Crescimento anualizado" value={fmtPct(s.cagr * 100)} />
-                  <MetricCard delay={0.07} symbol={tex`\mathcal{S}`} label="Sharpe (anualizado)" value={fmtRatio(s.sharpeAnnualizedExcel)} />
-                  <MetricCard delay={0.14} symbol={tex`\mathcal{D}`} label="Sortino (anualizado)" value={fmtRatio(s.sortinoAnnualizedExcel)} />
+                  <MetricCard delay={0} symbol={"\\text{CAGR}"} label="Crescimento anualizado" value={fmtPct(s.cagr * 100)} />
+                  <MetricCard delay={0.07} symbol={"\\mathcal{S}"} label="Sharpe (anualizado)" value={fmtRatio(s.sharpeAnnualizedExcel)} />
+                  <MetricCard delay={0.14} symbol={"\\mathcal{D}"} label="Sortino (anualizado)" value={fmtRatio(s.sortinoAnnualizedExcel)} />
                 </>
               ) : (
                 <div className="sm:col-span-3 text-zinc-600 text-sm font-mono py-4">
@@ -688,7 +687,7 @@ export function BacktestWorkPage({
               {[
                 {
                   label: 'Poder estatístico da amostra',
-                  body: <>Com <InlineMath math={tex`N_{\text{ES}} = 4{.}620`} /> e <InlineMath math={tex`N_{\text{NQ}} = 4{.}343`} /> operações, o erro-padrão do win rate estimado é <InlineMath math={tex`\text{SE}(\hat{p}) = \sqrt{\hat{p}(1-\hat{p})/N} \approx 0{,}007`} />. Um intervalo de 95% de confiança tem largura <InlineMath math={tex`\pm 1{,}4\%`} /> — estreito o suficiente para que as diferenças observadas sejam estatisticamente distinguíveis de ruído.</>,
+                  body: <>Com <InlineMath math={"N_{\\text{ES}} = 4{.}620"} /> e <InlineMath math={"N_{\\text{NQ}} = 4{.}343"} /> operações, o erro-padrão do win rate estimado é <InlineMath math={"\\text{SE}(\\hat{p}) = \\sqrt{\\hat{p}(1-\\hat{p})/N} \\approx 0{,}007"} />. Um intervalo de 95% de confiança tem largura <InlineMath math={"\\pm 1{,}4\\%"} /> — estreito o suficiente para que as diferenças observadas sejam estatisticamente distinguíveis de ruído.</>,
                 },
                 {
                   label: 'Parcimônia paramétrica',
@@ -699,12 +698,12 @@ export function BacktestWorkPage({
                   body: 'A análise year-by-year mostra todos os anos no positivo para MES, com win rate oscilando em faixa estreita ao longo de múltiplos regimes de volatilidade. Formalmente, um teste de estabilidade de parâmetros (e.g., CUSUM ou Chow test) não rejeita a hipótese de coeficientes estáveis ao longo do período.',
                 },
                 {
-                  label: <>Simetria <InlineMath math={tex`\mathbb{E}[\text{win}] \approx |\mathbb{E}[\text{loss}]|`} /></>,
-                  body: <>MES: <InlineMath math={tex`\bar{w} = 10{,}58\text{ pts},\;\bar{l} = -10{,}41\text{ pts}`} />. MNQ: <InlineMath math={tex`\bar{w} = 48{,}94\text{ pts},\;\bar{l} = -47{,}42\text{ pts}`} />. A razão <InlineMath math={tex`\bar{w}/|\bar{l}| \approx 1{,}02`} /> é coerente com estrutura de risco/retorno definida a priori — não com otimização post-hoc de targets.</>,
+                  label: <>Simetria <InlineMath math={"\\mathbb{E}[\\text{win}] \\approx |\\mathbb{E}[\\text{loss}]|"} /></>,
+                  body: <>MES: <InlineMath math={"\\bar{w} = 10{,}58\\text{ pts},\\;\\bar{l} = -10{,}41\\text{ pts}"} />. MNQ: <InlineMath math={"\\bar{w} = 48{,}94\\text{ pts},\\;\\bar{l} = -47{,}42\\text{ pts}"} />. A razão <InlineMath math={"\\bar{w}/|\\bar{l}| \\approx 1{,}02"} /> é coerente com estrutura de risco/retorno definida a priori — não com otimização post-hoc de targets.</>,
                 },
                 {
                   label: 'Profit Factor dentro de limites críveis',
-                  body: <>MES: <InlineMath math={tex`\text{PF} = 1{,}46`} />. MNQ: <InlineMath math={tex`\text{PF} = 1{,}41`} />. Profit factors acima de 2,5–3 em amostras intradiárias são tipicamente sintomáticos de data-mining. Os valores observados situam-se numa faixa razoável.</>,
+                  body: <>MES: <InlineMath math={"\\text{PF} = 1{,}46"} />. MNQ: <InlineMath math={"\\text{PF} = 1{,}41"} />. Profit factors acima de 2,5–3 em amostras intradiárias são tipicamente sintomáticos de data-mining. Os valores observados situam-se numa faixa razoável.</>,
                 },
               ].map(({ label, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -724,11 +723,11 @@ export function BacktestWorkPage({
               {[
                 {
                   label: 'Data-mining bias na seleção de frequência',
-                  body: <>Se o número de sinais por sessão foi determinado após comparação entre alternativas no mesmo histórico, isso constitui um grau de liberdade adicional. O impacto esperado é pequeno dado <InlineMath math={tex`N > 4{.}000`} />, mas o viés existe e deve ser registrado. A validação canônica é aplicar a escolha a um sub-período holdout não visto durante a calibração.</>,
+                  body: <>Se o número de sinais por sessão foi determinado após comparação entre alternativas no mesmo histórico, isso constitui um grau de liberdade adicional. O impacto esperado é pequeno dado <InlineMath math={"N > 4{.}000"} />, mas o viés existe e deve ser registrado. A validação canônica é aplicar a escolha a um sub-período holdout não visto durante a calibração.</>,
                 },
                 {
                   label: 'Quebra de regime em NQ pós-2020',
-                  body: <>A série NQ exibe aceleração expressiva a partir de 2021, consistente com aumento estrutural de volatilidade. Isso não é overfitting — é mudança de regime. Mas se qualquer parâmetro foi ajustado com visibilidade sobre esse período, os estimadores <InlineMath math={tex`\hat{\mu}_{\text{NQ}}`} /> e <InlineMath math={tex`\hat{\sigma}_{\text{NQ}}`} /> estarão contaminados por look-ahead implícito.</>,
+                  body: <>A série NQ exibe aceleração expressiva a partir de 2021, consistente com aumento estrutural de volatilidade. Isso não é overfitting — é mudança de regime. Mas se qualquer parâmetro foi ajustado com visibilidade sobre esse período, os estimadores <InlineMath math={"\\hat{\\mu}_{\\text{NQ}}"} /> e <InlineMath math={"\\hat{\\sigma}_{\\text{NQ}}"} /> estarão contaminados por look-ahead implícito.</>,
                 },
                 {
                   label: 'Viés de recência nos dados mais recentes',
@@ -736,7 +735,7 @@ export function BacktestWorkPage({
                 },
                 {
                   label: 'Lacuna simulação–execução (execution gap)',
-                  body: <>O maior risco estrutural não é overfitting estatístico — é o gap entre a hipótese de preenchimento do backtest e o comportamento real das ordens em live. O motor assume fill garantido ao nível de preço definido. Em live, o mercado pode <em>passar pelo nível sem retornar</em>, gerando misses ou fills a preços adversos. Este gap infla o win rate simulado de forma sistemática e não é corrigível apenas por ajuste de <InlineMath math={tex`\delta`} />.</>,
+                  body: <>O maior risco estrutural não é overfitting estatístico — é o gap entre a hipótese de preenchimento do backtest e o comportamento real das ordens em live. O motor assume fill garantido ao nível de preço definido. Em live, o mercado pode <em>passar pelo nível sem retornar</em>, gerando misses ou fills a preços adversos. Este gap infla o win rate simulado de forma sistemática e não é corrigível apenas por ajuste de <InlineMath math={"\\delta"} />.</>,
                 },
               ].map(({ label, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -755,7 +754,7 @@ export function BacktestWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="space-y-4">
                 <p>
-                  A escolha de operar <InlineMath math={tex`K > 1`} /> sinais por sessão decorre de uma prova sobre a distribuição do P&amp;L diário. Seja <InlineMath math={tex`p`} /> a win rate por sinal e assuma independência entre sinais de uma mesma sessão como aproximação de primeira ordem. A probabilidade de uma sessão encerrar com P&amp;L negativo é:
+                  A escolha de operar <InlineMath math={"K > 1"} /> sinais por sessão decorre de uma prova sobre a distribuição do P&amp;L diário. Seja <InlineMath math={"p"} /> a win rate por sinal e assuma independência entre sinais de uma mesma sessão como aproximação de primeira ordem. A probabilidade de uma sessão encerrar com P&amp;L negativo é:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -763,14 +762,14 @@ export function BacktestWorkPage({
               <Definition
                 id="6.3.1"
                 name="Probabilidade de sessão perdedora com K sinais independentes"
-                formula={tex`P(\text{Loss}_{\text{sessão}} \mid K) = (1 - p)^K`}
+                formula={"P(\\text{Loss}_{\\text{sessão}} \\mid K) = (1 - p)^K"}
                 description="Para p ≈ 0,58, K=1 → P(Loss) ≈ 0,42; K=2 → P(Loss) ≈ 0,18. O segundo sinal não serve para aumentar o retorno esperado — serve para reduzir a probabilidade de dias de resultado negativo puro."
               />
             </Reveal>
             <Reveal delay={0.08}>
               <ArticleProse className="space-y-4 mt-2">
                 <p>
-                  O valor esperado do P&amp;L diário com <InlineMath math={tex`K`} /> sinais é <InlineMath math={tex`K \cdot \mathbb{E}[r]`} /> — escala linearmente. Mas a <strong>distribuição</strong> muda: a massa na cauda esquerda cai de <InlineMath math={tex`(1-p)`} /> para <InlineMath math={tex`(1-p)^K`} />. A hipótese de independência é uma aproximação — sinais da mesma sessão compartilham contexto de mercado. Com correlação <InlineMath math={tex`\rho \in [0,1]`} /> entre eles, o estimador real de <InlineMath math={tex`P(\text{Loss}_{\text{sessão}})`} /> situa-se entre os extremos:
+                  O valor esperado do P&amp;L diário com <InlineMath math={"K"} /> sinais é <InlineMath math={"K \\cdot \\mathbb{E}[r]"} /> — escala linearmente. Mas a <strong>distribuição</strong> muda: a massa na cauda esquerda cai de <InlineMath math={"(1-p)"} /> para <InlineMath math={"(1-p)^K"} />. A hipótese de independência é uma aproximação — sinais da mesma sessão compartilham contexto de mercado. Com correlação <InlineMath math={"\\rho \\in [0,1]"} /> entre eles, o estimador real de <InlineMath math={"P(\\text{Loss}_{\\text{sessão}})"} /> situa-se entre os extremos:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -778,7 +777,7 @@ export function BacktestWorkPage({
               <Definition
                 id="6.3.2"
                 name="Bounds para P(sessão perdedora) com correlação"
-                formula={tex`(1-p)^K \;\leq\; P(\text{Loss}_{\text{sessão}}) \;\leq\; (1-p), \quad \rho \in [0, 1]`}
+                formula={"(1-p)^K \\;\\leq\\; P(\\text{Loss}_{\\text{sessão}}) \\;\\leq\\; (1-p), \\quad \\rho \\in [0, 1]"}
                 description="O backtest empírico já captura implicitamente a correlação real entre sinais — as 4k+ operações incluem os pares correlacionados. Os estimadores de MDD e win rate calculados sobre o histórico são, portanto, os mais honestos disponíveis."
               />
             </Reveal>
@@ -814,8 +813,8 @@ export function BacktestWorkPage({
             <div className="mt-6 space-y-4">
               {[
                 { title: 'Viés de sobrevivência e look-ahead', body: 'A regra de decisão é aplicada ao histórico completo. Mesmo sem look-ahead direto, parâmetros ou limiares derivados do mesmo período criam um viés in-sample implícito.' },
-                { title: 'Preenchimento de ordens', body: <>O motor assume preenchimento total ao preço simulado. Em tamanhos maiores, o impacto de mercado é proporcional à profundidade do book — não modelado aqui. O slippage é tratado como parâmetro fixo <InlineMath math={tex`\delta`} /> adicionado ao custo por trade.</> },
-                { title: 'Dependência de regime', body: <>Os estimadores <InlineMath math={tex`\hat{\mu}`} /> e <InlineMath math={tex`\hat{\sigma}`} /> são estacionários apenas se o regime de mercado for estável. Períodos de baixa volatilidade e crises produzem distribuições distintas, invalidando interpolação ingênua de Sharpe/Sortino.</> },
+                { title: 'Preenchimento de ordens', body: <>O motor assume preenchimento total ao preço simulado. Em tamanhos maiores, o impacto de mercado é proporcional à profundidade do book — não modelado aqui. O slippage é tratado como parâmetro fixo <InlineMath math={"\\delta"} /> adicionado ao custo por trade.</> },
+                { title: 'Dependência de regime', body: <>Os estimadores <InlineMath math={"\\hat{\\mu}"} /> e <InlineMath math={"\\hat{\\sigma}"} /> são estacionários apenas se o regime de mercado for estável. Períodos de baixa volatilidade e crises produzem distribuições distintas, invalidando interpolação ingênua de Sharpe/Sortino.</> },
                 { title: 'Operação live', body: 'A infraestrutura de execução (reconexão de API, latência, gestão de estados, confirmação humana) introduz risco operacional não capturado pelas métricas quantitativas.' },
               ].map(({ title, body }, i) => (
                 <Reveal key={i} delay={i * 0.05}>
