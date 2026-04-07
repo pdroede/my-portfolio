@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Mesmo preto do hero / Spline (#000) em todo o site */
+  --color-background: #000000;
+  --color-foreground: hsl(0 0% 98%);
+  --color-card: hsl(240 10% 6%);
+  --color-card-foreground: hsl(0 0% 98%);
+  --color-muted: hsl(240 5% 18%);
+  --color-muted-foreground: hsl(240 5% 64%);
+  --color-border: hsl(240 6% 20%);
+  --color-primary: hsl(217 91% 60%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-popover: hsl(240 10% 8%);
+  --color-popover-foreground: hsl(0 0% 98%);
+  /* shadcn-style tokens (calendário / botões) */
+  --color-accent: hsl(240 5% 16%);
+  --color-accent-foreground: hsl(0 0% 98%);
+  --color-secondary: hsl(240 5% 18%);
+  --color-secondary-foreground: hsl(0 0% 98%);
+  --color-destructive: hsl(0 62% 45%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-input: hsl(240 6% 22%);
+  --color-ring: hsl(217 91% 60%);
+  /* Bar chart (visx + motion) — tokens para utilities Tailwind */
+  --color-chart-background: var(--chart-background);
+  --color-chart-foreground: var(--chart-foreground);
+  --color-chart-foreground-muted: var(--chart-foreground-muted);
+  --color-chart-line-primary: var(--chart-line-primary);
+  --color-chart-line-secondary: var(--chart-line-secondary);
+  --color-chart-crosshair: var(--chart-crosshair);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-tooltip-background: var(--chart-tooltip-background);
+  --color-chart-tooltip-foreground: var(--chart-tooltip-foreground);
+  --color-chart-tooltip-muted: var(--chart-tooltip-muted);
+  --color-chart-marker-background: var(--chart-marker-background);
+  --color-chart-marker-border: var(--chart-marker-border);
+  --color-chart-marker-foreground: var(--chart-marker-foreground);
+  --color-chart-ring-background: var(--chart-ring-background);
+  --color-chart-label: var(--chart-label);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+}
+
+:root {
+  --chart-background: oklch(0.12 0 0);
+  --chart-foreground: oklch(0.92 0 0);
+  --chart-foreground-muted: oklch(0.65 0.01 260);
+  --chart-1: oklch(0.72 0.19 155);
+  --chart-2: oklch(0.55 0.12 250);
+  --chart-3: oklch(0.68 0.16 145);
+  --chart-line-primary: var(--chart-1);
+  --chart-line-secondary: var(--chart-2);
+  --chart-crosshair: oklch(0.55 0.02 260);
+  --chart-grid: oklch(0.22 0 0);
+  --chart-tooltip-background: oklch(0.18 0.01 260 / 0.92);
+  --chart-tooltip-foreground: oklch(0.96 0 0);
+  --chart-tooltip-muted: oklch(0.62 0.01 260);
+  --chart-marker-background: oklch(0.2 0.01 260);
+  --chart-marker-border: oklch(0.35 0.01 260);
+  --chart-marker-foreground: oklch(0.9 0 0);
+  --chart-ring-background: oklch(0.35 0.01 260 / 0.25);
+  --chart-label: oklch(0.7 0.01 260);
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@utility animate-spotlight {
+  animation: spotlight 2s ease 0.75s forwards;
+}
+
+/** Textura subtil (hero gradient / dashboards) — compatível com `bg-noise` do template LeadGenie-style */
+@utility bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
