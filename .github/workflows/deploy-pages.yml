@@ -26,23 +26,20 @@ jobs:
           node-version: '22'
           cache: npm
 
-      - name: Set base path for GitHub Pages
-        id: base
+      - run: npm ci
+
+      # Vite must see VITE_BASE_PATH so /assets/*.js load under /<repo>/ (not site root).
+      - name: Build
         run: |
           REPO="${{ github.event.repository.name }}"
           OWNER="${{ github.repository_owner }}"
           if [ "$REPO" = "${OWNER}.github.io" ]; then
-            echo "path=/" >> "$GITHUB_OUTPUT"
+            export VITE_BASE_PATH="/"
           else
-            echo "path=/$REPO/" >> "$GITHUB_OUTPUT"
+            export VITE_BASE_PATH="/$REPO/"
           fi
-
-      - run: npm ci
-
-      - name: Build
-        env:
-          VITE_BASE_PATH: ${{ steps.base.outputs.path }}
-        run: npm run build
+          echo "VITE_BASE_PATH=$VITE_BASE_PATH"
+          npm run build
 
       # SPA: GitHub Pages serves this when a route has no matching file (e.g. /trabalhos/foo).
       - run: cp dist/index.html dist/404.html
