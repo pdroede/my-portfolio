@@ -5,6 +5,7 @@ import { motion, useInView } from 'motion/react'
 import { InlineMath, BlockMath } from 'react-katex'
 
 import { cn } from '@/lib/utils'
+import { sp } from '@/lib/katex-strings'
 
 /* ─── TOC sections ──────────────────────────────────────────────────── */
 
@@ -291,7 +292,7 @@ export function StockPredictionWorkPage({
                     Este trabalho descreve a construção de um pipeline de pesquisa para previsão de <strong>volatilidade realizada</strong> do S&amp;P 500 usando sinais extraídos do mercado de opções. A hipótese central é que a superfície de volatilidade implícita — capturada pela família de índices VIX, pela estrutura a termo da volatilidade e pelo prêmio de variância — contém informação preditiva sobre a volatilidade futura que vai além do que o VIX sozinho fornece.
                   </p>
                   <p>
-                    O framework combina um modelo HAR-RV+IV de referência acadêmica, uma regressão Lasso para seleção automática de variáveis e um XGBoost para captura de não-linearidades, validados por <em>time-series cross-validation</em> com janelas expansivas. O conjunto de <strong>24 features</strong> organizadas em 7 grupos cobre nível de IV, estrutura a termo, skew de opções, volatilidade realizada histórica, prêmio de variância, vol-of-vol e regime de mercado. O ensemble dos três modelos alcança <strong><InlineMath math={"R^2_{\\text{OOS}} \\approx 0.40"} /></strong>, resultado expressivo para previsão de volatilidade fora de amostra.
+                    O framework combina um modelo HAR-RV+IV de referência acadêmica, uma regressão Lasso para seleção automática de variáveis e um XGBoost para captura de não-linearidades, validados por <em>time-series cross-validation</em> com janelas expansivas. O conjunto de <strong>24 features</strong> organizadas em 7 grupos cobre nível de IV, estrutura a termo, skew de opções, volatilidade realizada histórica, prêmio de variância, vol-of-vol e regime de mercado. O ensemble dos três modelos alcança <strong><InlineMath math={sp.abstractR2} /></strong>, resultado expressivo para previsão de volatilidade fora de amostra.
                   </p>
                   <p>
                     O sistema é implantado como dashboard Streamlit com previsões ao vivo, análise por regime e interpretabilidade via valores SHAP.
@@ -333,7 +334,7 @@ export function StockPredictionWorkPage({
             <Reveal delay={0.07}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Seja <InlineMath math={"P_t"} /> o preço de fechamento do S&amp;P 500 e <InlineMath math={"r_t = \\log(P_t / P_{t-1})"} /> o log-retorno diário. A <strong>volatilidade realizada</strong> anualizada sobre uma janela de <InlineMath math={"h"} /> dias é:
+                  Seja <InlineMath math={"P_t"} /> o preço de fechamento do S&amp;P 500 e <InlineMath math={sp.rLog} /> o log-retorno diário. A <strong>volatilidade realizada</strong> anualizada sobre uma janela de <InlineMath math={"h"} /> dias é:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -342,7 +343,7 @@ export function StockPredictionWorkPage({
               <Definition
                 id="3.1"
                 name="Volatilidade Realizada"
-                formula={"\\text{RV}_h = \\sqrt{\\frac{252}{h} \\sum_{i=1}^{h} r_{t-i}^2}"}
+                formula={sp.rvH}
                 description="Medida de dispersão histórica anualizada. A raiz de 252 converte a variância diária para escala anual. Usada tanto como feature (RV passada) quanto como alvo (RV futura)."
               />
             </Reveal>
@@ -358,7 +359,7 @@ export function StockPredictionWorkPage({
               <Definition
                 id="3.2"
                 name="Variável-alvo"
-                formula={"\\hat{y}_{t,h} = \\log\\!\\left(\\text{RV}_h^{\\text{forward}}\\right), \\quad \\text{RV}_h^{\\text{forward}} = \\sqrt{\\frac{252}{h}\\sum_{i=1}^{h} r_{t+i}^2}"}
+                formula={sp.yTarget}
                 description="Trabalhar em log-escala reduz assimetria e estabiliza variância. Previsões em log são convertidas de volta via exp() para interpretação em pontos percentuais de volatilidade anualizada."
               />
             </Reveal>
@@ -366,7 +367,7 @@ export function StockPredictionWorkPage({
             <Reveal delay={0.07}>
               <ArticleProse className="space-y-4">
                 <p>
-                  O <strong>Prêmio de Variância</strong> (<InlineMath math={"\\text{VRP}"} />) captura a diferença entre variância implícita e realizada — sinal de quanto os formadores de opções cobram de prêmio de risco:
+                  O <strong>Prêmio de Variância</strong> (<InlineMath math={sp.vrp} />) captura a diferença entre variância implícita e realizada — sinal de quanto os formadores de opções cobram de prêmio de risco:
                 </p>
               </ArticleProse>
             </Reveal>
@@ -374,7 +375,7 @@ export function StockPredictionWorkPage({
               <Definition
                 id="3.3"
                 name="Variance Risk Premium"
-                formula={"\\text{VRP}_t = \\text{IV}_t^2 - \\text{RV}_{22,t}^2"}
+                formula={sp.vrpFormula}
                 description="IV_t é o VIX em escala decimal (VIX/100). VRP positivo indica que o mercado de opções precifica variância acima do que foi realizado — sinal historicamente associado a retornos de volatilidade acima da média."
               />
             </Reveal>
@@ -390,7 +391,7 @@ export function StockPredictionWorkPage({
               <Definition
                 id="3.4"
                 name="R² OOS — Goyal-Welch"
-                formula={"R^2_{\\text{OOS}} = 1 - \\frac{\\sum_{t}(y_t - \\hat{y}_t)^2}{\\sum_{t}(y_t - \\bar{y})^2}"}
+                formula={sp.r2oos}
                 description="R² > 0 indica que o modelo bate o baseline de prever a média histórica. R² = 0 é equivalente ao baseline. R² < 0 significa que o modelo é pior que adivinhar a média — critério rigoroso amplamente usado em pesquisa de previsibilidade."
               />
             </Reveal>
@@ -406,7 +407,7 @@ export function StockPredictionWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  Os dados são obtidos via Yahoo Finance cobrindo o período de 2010 a 2024, com atualização diária. Os instrumentos utilizados são o próprio S&amp;P 500 (<InlineMath math={"\\texttt{\\^{}GSPC}"} />) e a família de índices VIX: VIX de 30 dias (<InlineMath math={"\\texttt{\\^{}VIX}"} />), VIX de 9 dias (<InlineMath math={"\\texttt{\\^{}VIX9D}"} />), VIX de 3 meses (<InlineMath math={"\\texttt{\\^{}VIX3M}"} />), VIX de 6 meses (<InlineMath math={"\\texttt{\\^{}VIX6M}"} />) e o índice SKEW (<InlineMath math={"\\texttt{\\^{}SKEW}"} />).
+                  Os dados são obtidos via Yahoo Finance cobrindo o período de 2010 a 2024, com atualização diária. Os instrumentos utilizados são o próprio S&amp;P 500 (<InlineMath math={sp.ttGSPC} />) e a família de índices VIX: VIX de 30 dias (<InlineMath math={sp.ttVIX} />), VIX de 9 dias (<InlineMath math={sp.ttVIX9D} />), VIX de 3 meses (<InlineMath math={sp.ttVIX3M} />), VIX de 6 meses (<InlineMath math={sp.ttVIX6M} />) e o índice SKEW (<InlineMath math={sp.ttSKEW} />).
                 </p>
                 <p>
                   A partir dessas séries são construídas <strong>24 features</strong> organizadas em 7 grupos funcionais. Todas as features são <em>winsorized</em> no 1.º e 99.º percentis para controle de outliers, e a variável-alvo recebe tratamento idêntico para simetria.
@@ -418,11 +419,11 @@ export function StockPredictionWorkPage({
               {[
                 {
                   n: '4.1', title: 'Nível de IV (5 features)',
-                  body: <>Nível absoluto da volatilidade implícita nos quatro vencimentos: <InlineMath math={"\\text{VIX}_{9d},\\, \\text{VIX}_{30d},\\, \\text{VIX}_{3m},\\, \\text{VIX}_{6m}"} /> e sua versão em log. Captura o regime geral de volatilidade implícita do mercado.</>,
+                  body: <>Nível absoluto da volatilidade implícita nos quatro vencimentos: <InlineMath math={sp.feat41} /> e sua versão em log. Captura o regime geral de volatilidade implícita do mercado.</>,
                 },
                 {
                   n: '4.2', title: 'Estrutura a Termo (4 features)',
-                  body: <>Inclinação da curva de volatilidade implícita: diferenças entre vencimentos curtos, longos e spread total (<InlineMath math={"\\text{VIX}_{3m} - \\text{VIX}_{9d}"} />). <em>Contango</em> (curva normal, IV crescente com prazo) vs. <em>backwardation</em> (inversão de curva, sinal de estresse) são estados de regime com comportamento preditivo distinto.</>,
+                  body: <>Inclinação da curva de volatilidade implícita: diferenças entre vencimentos curtos, longos e spread total (<InlineMath math={sp.feat42} />). <em>Contango</em> (curva normal, IV crescente com prazo) vs. <em>backwardation</em> (inversão de curva, sinal de estresse) são estados de regime com comportamento preditivo distinto.</>,
                 },
                 {
                   n: '4.3', title: 'Skew e Risco de Cauda (2 features)',
@@ -430,11 +431,11 @@ export function StockPredictionWorkPage({
                 },
                 {
                   n: '4.4', title: 'Volatilidade Realizada Histórica (4 features)',
-                  body: <><InlineMath math={"\\text{RV}_5"} /> (semanal) e <InlineMath math={"\\text{RV}_{22}"} /> (mensal) em log-escala, e dois ratios <InlineMath math={"\\text{RV}_5 / \\text{RV}_{22}"} /> que capturam aceleração recente de volatilidade. Fundamento do modelo HAR (Corsi, 2009).</>,
+                  body: <><InlineMath math={sp.feat44a} /> (semanal) e <InlineMath math={sp.feat44b} /> (mensal) em log-escala, e dois ratios <InlineMath math={sp.feat44c} /> que capturam aceleração recente de volatilidade. Fundamento do modelo HAR (Corsi, 2009).</>,
                 },
                 {
                   n: '4.5', title: 'Prêmio de Variância (3 features)',
-                  body: <><InlineMath math={"\\text{VRP}_{30d}"} />, <InlineMath math={"\\text{VRP}_{\\text{short}}"} /> e um indicador direcional de sinal do VRP. Diferencial entre variância implícita e realizada; persistente e historicamente associado a predictabilidade de volatilidade.</>,
+                  body: <><InlineMath math={sp.feat45a} />, <InlineMath math={sp.feat45b} /> e um indicador direcional de sinal do VRP. Diferencial entre variância implícita e realizada; persistente e historicamente associado a predictabilidade de volatilidade.</>,
                 },
                 {
                   n: '4.6', title: 'Vol-of-Vol e Range (3 features)',
@@ -468,7 +469,7 @@ export function StockPredictionWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="mt-6 space-y-4">
                 <p>
-                  O pipeline emprega quatro preditores organizados da menor para a maior complexidade, mais um ensemble. A comparação interna revela o que cada camada de complexidade adiciona em termos de <InlineMath math={"R^2_{\\text{OOS}}"} /> — e onde a lei dos retornos decrescentes entra.
+                  O pipeline emprega quatro preditores organizados da menor para a maior complexidade, mais um ensemble. A comparação interna revela o que cada camada de complexidade adiciona em termos de <InlineMath math={sp.pipeR2oos} /> — e onde a lei dos retornos decrescentes entra.
                 </p>
               </ArticleProse>
             </Reveal>
@@ -477,23 +478,23 @@ export function StockPredictionWorkPage({
               {[
                 {
                   n: 'M.1', title: 'Baseline — VIX Naive',
-                  body: <>Usa o próprio VIX como previsão direta: <InlineMath math={"\\hat{y}_t = \\log(\\text{VIX}_t / 100)"} />. Benchmark natural: qualquer modelo que não supere o VIX fora de amostra é descartado. Na literatura, superar o VIX é não-trivial — ele já incorpora expectativa coletiva de mercado.</>,
+                  body: <>Usa o próprio VIX como previsão direta: <InlineMath math={sp.naiveY} />. Benchmark natural: qualquer modelo que não supere o VIX fora de amostra é descartado. Na literatura, superar o VIX é não-trivial — ele já incorpora expectativa coletiva de mercado.</>,
                 },
                 {
                   n: 'M.2', title: 'HAR-RV+IV',
-                  body: <><em>Heterogeneous Autoregressive model</em> com volatilidade implícita, baseado em Corsi (2009). Regressão linear sobre 5 features selecionadas: <InlineMath math={"\\log(\\text{RV}_5),\\, \\log(\\text{RV}_{22}),\\, \\log(\\text{VIX}),\\, \\text{VRP}_{30d},\\, \\text{SKEW}"} />. Transparente e interpretável; captura persistência de volatilidade em múltiplas escalas de tempo.</>,
+                  body: <><em>Heterogeneous Autoregressive model</em> com volatilidade implícita, baseado em Corsi (2009). Regressão linear sobre 5 features selecionadas: <InlineMath math={sp.harFeats} />. Transparente e interpretável; captura persistência de volatilidade em múltiplas escalas de tempo.</>,
                 },
                 {
                   n: 'M.3', title: 'Lasso (seleção esparsa)',
-                  body: <>Regressão <InlineMath math={"\\ell_1"} />-penalizada sobre todas as 24 features. A penalidade zera coeficientes de features não-informativas, gerando um modelo esparso e interpretável. Captura efeitos lineares que o HAR não usa, sem sobreajustar por seleção manual de variáveis.</>,
+                  body: <>Regressão <InlineMath math={sp.ell1} />-penalizada sobre todas as 24 features. A penalidade zera coeficientes de features não-informativas, gerando um modelo esparso e interpretável. Captura efeitos lineares que o HAR não usa, sem sobreajustar por seleção manual de variáveis.</>,
                 },
                 {
                   n: 'M.4', title: 'XGBoost',
-                  body: <>Gradient boosting com árvores rasas (<InlineMath math={"d_{\\max}=4"} />) para captura de não-linearidades e interações entre features. Usado também para extração de valores SHAP — atribuição de importância por feature em nível de previsão individual. Não domina os modelos lineares uniformemente, mas complementa o ensemble.</>,
+                  body: <>Gradient boosting com árvores rasas (<InlineMath math={sp.dmax} />) para captura de não-linearidades e interações entre features. Usado também para extração de valores SHAP — atribuição de importância por feature em nível de previsão individual. Não domina os modelos lineares uniformemente, mas complementa o ensemble.</>,
                 },
                 {
                   n: 'M.5', title: 'Ensemble (média simples)',
-                  body: <>Média aritmética das previsões de HAR, Lasso e XGBoost. Reduz variância de modelo específico sem introduzir parâmetros adicionais. A diversidade entre modelos lineares e não-lineares gera ganho de <InlineMath math={"R^2_{\\text{OOS}}"} /> consistente sobre qualquer modelo individual.</>,
+                  body: <>Média aritmética das previsões de HAR, Lasso e XGBoost. Reduz variância de modelo específico sem introduzir parâmetros adicionais. A diversidade entre modelos lineares e não-lineares gera ganho de <InlineMath math={sp.ensR2} /> consistente sobre qualquer modelo individual.</>,
                 },
               ].map(({ n, title, body }, i) => (
                 <Reveal key={n} delay={i * 0.05}>
@@ -520,7 +521,7 @@ export function StockPredictionWorkPage({
               <Definition
                 id="5.1"
                 name="TimeSeriesSplit — Janela Expansiva"
-                formula={"\\mathcal{D}_k^{\\text{train}} = \\{(x_t, y_t)\\}_{t=1}^{T_k}, \\quad \\mathcal{D}_k^{\\text{test}} = \\{(x_t, y_t)\\}_{t=T_k+1}^{T_k + \\Delta}"}
+                formula={sp.tsSplit}
                 description="Onde T_k cresce a cada fold k ∈ {1,…,5} e Δ é o tamanho fixo de cada janela de teste. A junção dos resíduos fora de amostra de todos os folds forma a série usada para calcular R² OOS."
               />
             </Reveal>
@@ -543,16 +544,16 @@ export function StockPredictionWorkPage({
 
             {/* metric cards */}
             <div className="mt-8 grid grid-cols-2 gap-3">
-              <MetricCard symbol={"R^2_{\\text{OOS}}"} label="Ensemble · h = 5d" value="≈ 0.40" delay={0.05} />
-              <MetricCard symbol={"\\text{MAE}"} label="Erro médio (p.p. vol)" value="≈ 2.8 pp" delay={0.10} />
+              <MetricCard symbol={sp.metricR2} label="Ensemble · h = 5d" value="≈ 0.40" delay={0.05} />
+              <MetricCard symbol={sp.metricMAE} label="Erro médio (p.p. vol)" value="≈ 2.8 pp" delay={0.10} />
               <MetricCard symbol={"h^*"} label="Horizonte ótimo" value="5–10 d" delay={0.15} />
-              <MetricCard symbol={"|\\mathcal{F}|"} label="Total de features" value="24" delay={0.20} />
+              <MetricCard symbol={sp.metricF} label="Total de features" value="24" delay={0.20} />
             </div>
 
             <Reveal delay={0.1}>
               <ArticleProse className="mt-10 space-y-5">
                 <p>
-                  O ensemble alcança <InlineMath math={"R^2_{\\text{OOS}} \\approx 0.40"} />, superando o VIX Naive (baseline) de forma consistente. Na literatura de previsão de volatilidade, <InlineMath math={"R^2_{\\text{OOS}} > 0.20"} /> já é considerado resultado robusto; valores próximos de 0.40 são expressivos considerando que o benchmark já incorpora expectativas de mercado.
+                  O ensemble alcança <InlineMath math={sp.res556a} />, superando o VIX Naive (baseline) de forma consistente. Na literatura de previsão de volatilidade, <InlineMath math={sp.res556b} /> já é considerado resultado robusto; valores próximos de 0.40 são expressivos considerando que o benchmark já incorpora expectativas de mercado.
                 </p>
                 <p>
                   <strong>Análise por horizonte:</strong> o modelo tem melhor desempenho nos horizontes de 5 a 10 dias úteis. No horizonte de 1 dia, o sinal é mais ruidoso e difícil de separar da microestrutura. No horizonte de 21 dias (mensal), a mean-reversion de longo prazo reduz a vantagem preditiva incremental das features de curto prazo.
@@ -561,7 +562,7 @@ export function StockPredictionWorkPage({
                   <strong>Análise por regime:</strong> desempenho avaliado separadamente em três estados de mercado definidos pelo nível do VIX (<em>low</em>, <em>moderate</em>, <em>high</em>). O modelo tende a ser mais preciso em regimes de baixa volatilidade — onde a estrutura a termo é mais estável. Em regimes de estresse, a alta vol-of-vol reduz a previsibilidade, mas o ensemble ainda supera o baseline VIX Naive.
                 </p>
                 <p>
-                  <strong>Interpretabilidade SHAP:</strong> os valores SHAP do XGBoost mostram que as features de maior importância agregada são <InlineMath math={"\\log(\\text{RV}_{22})"} />, <InlineMath math={"\\text{VRP}_{30d}"} /> e a inclinação da estrutura a termo — resultado consistente com a seleção do Lasso, que converge nas mesmas variáveis como features de maior peso.
+                  <strong>Interpretabilidade SHAP:</strong> os valores SHAP do XGBoost mostram que as features de maior importância agregada são <InlineMath math={sp.shapLog} />, <InlineMath math={sp.shapVRP} /> e a inclinação da estrutura a termo — resultado consistente com a seleção do Lasso, que converge nas mesmas variáveis como features de maior peso.
                 </p>
               </ArticleProse>
             </Reveal>
@@ -602,7 +603,7 @@ export function StockPredictionWorkPage({
             <Reveal delay={0.08}>
               <ArticleProse className="mt-6 space-y-5">
                 <p>
-                  A contribuição central deste trabalho é metodológica: um pipeline completo de ponta a ponta, de dados brutos até dashboard ao vivo, com separação explícita entre engenharia de features, treinamento com validação sem vazamento, métricas de avaliação e interface de análise. O resultado numérico (<InlineMath math={"R^2_{\\text{OOS}} \\approx 0.40"} />) é relevante, mas o arcabouço que permite auditá-lo é o que garante confiança no número.
+                  A contribuição central deste trabalho é metodológica: um pipeline completo de ponta a ponta, de dados brutos até dashboard ao vivo, com separação explícita entre engenharia de features, treinamento com validação sem vazamento, métricas de avaliação e interface de análise. O resultado numérico (<InlineMath math={sp.final604} />) é relevante, mas o arcabouço que permite auditá-lo é o que garante confiança no número.
                 </p>
                 <p>
                   A escolha de trabalhar em log-escala, aplicar TimeSeriesSplit em vez de cross-validation convencional, e adotar o VIX como baseline (e não uma média ingênua) reflete o rigor metodológico que a literatura de previsão de volatilidade exige. Modelos que ignoram essas escolhas frequentemente apresentam <InlineMath math={"R^2"} /> inflados por vazamento temporal ou por comparação contra um benchmark fraco.
