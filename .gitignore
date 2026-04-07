@@ -21,6 +21,9 @@ dist-ssr
 *.csv
 public/data/
 src/data/*.json
+# Portfolio backtest charts (required for production build)
+!src/data/sp500-summary.json
+!src/data/nasdaq-summary.json
 /My Strategy/
 /MyStrategy/
 
