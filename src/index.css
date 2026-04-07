@@ -1,4 +1,10 @@
 @import 'tailwindcss';
+@import 'katex/dist/katex.min.css';
+
+/* Prose `tracking-*` inherits onto KaTeX and breaks glyph metrics */
+.katex {
+  letter-spacing: normal;
+}
 
 @theme {
   /* Mesmo preto do hero / Spline (#000) em todo o site */

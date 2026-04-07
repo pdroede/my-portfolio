@@ -86,6 +86,8 @@ function ArticleProse({ children, className }: { children: React.ReactNode; clas
       style={{ fontFamily: SERIF }}
       className={cn(
         'text-zinc-300 text-[1.0625rem] leading-[1.9] tracking-[0.01em]',
+        /* KaTeX breaks if letter-spacing inherits from prose */
+        '[&_.katex]:tracking-normal',
         '[&_strong]:text-zinc-100 [&_strong]:font-semibold',
         '[&_em]:italic [&_em]:text-zinc-300',
         className,
